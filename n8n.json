@@ -1,0 +1,185 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        1376,
+        -2640
+      ],
+      "id": "295384bd-4619-4ec1-a704-7e78c8121060",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1568,
+        -2416
+      ],
+      "id": "8dbe093d-d273-4c21-aaf4-447697d53cd3",
+      "name": "Google Gemini Chat Model10",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "pUIMXslk2mqS6zPH",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "CHAT_ID",
+        "text": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2000,
+        -2640
+      ],
+      "id": "9aadcbc7-51f0-4912-afad-c2cfa1439f74",
+      "name": "Send a text message10",
+      "webhookId": "77040f1a-2243-406f-b035-ab5d040fbebb",
+      "credentials": {
+        "telegramApi": {
+          "id": "UfpmxTUIz33kQG2P",
+          "name": "Telegram account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "cityName": "."
+      },
+      "type": "n8n-nodes-base.openWeatherMapTool",
+      "typeVersion": 1,
+      "position": [
+        1712,
+        -2416
+      ],
+      "id": "8dd9842d-ebd1-49d9-ab88-d1e9c9ed67f8",
+      "name": "OpenWeatherMap6",
+      "credentials": {
+        "openWeatherMapApi": {
+          "id": "9qVZGwFiPtCAz5Yf",
+          "name": "OpenWeatherMap account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1840,
+        -2416
+      ],
+      "id": "a85e4634-1f3c-42cd-b8a6-6c36a7e9c71b",
+      "name": "Get many events in Google Calendar6",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "5Jtx79gn8vaW72oa",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "You are a daily calendar checker and you tell me the days weather in Phuket, th. structure it minimally only relevant info have it in nice rows. dont forget to check the calendar for any events. here is a example:\n Weather in Phuket, Thailand:\nTemperature: 27.68°C\nFeels like: 31.59°C\nDescription: few clouds\n\nCalendar Events:\nJog today from 21:45 to 22:45\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1632,
+        -2640
+      ],
+      "id": "581c697c-3646-4489-9e2d-3aa0c417ea4b",
+      "name": "AI"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model10": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenWeatherMap6": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many events in Google Calendar6": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI": {
+      "main": [
+        [
+          {
+            "node": "Send a text message10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1efc3d76fa127d96400db5c37840949eced8c5cc2b3f41157e7cce20e9669b79"
+  }
+}
